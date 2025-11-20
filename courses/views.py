@@ -1,3 +1,5 @@
-from django.shortcuts import render
+from django.http import JsonResponse
 
-# Create your views here.
+
+def course_list(request):
+    return JsonResponse({"message": "Courses API is working!"})
