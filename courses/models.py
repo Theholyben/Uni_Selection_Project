@@ -10,8 +10,7 @@ class Course(models.Model):
     time = models.CharField(max_length=20)
     location = models.CharField(max_length=100)
     prerequisites = models.ManyToManyField('self', symmetrical=False, blank=True)
-    min_units = models.PositiveIntegerField(default=1)
-    max_units = models.PositiveIntegerField(default=3)
+    units = models.IntegerField()
 
     def __str__(self):
         return f"{self.code} - {self.name}"
