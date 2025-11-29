@@ -18,11 +18,4 @@ class User(AbstractUser):
     def is_admin(self):
         return self.role == 'ADMIN'
 
-    def is_student(self):
-        return self.role == 'STUDENT'
-
-    def is_professor(self):
-        return self.role == 'PROFESSOR'
-
-    def __str__(self):
-        return f"{self.username} - {self.get_role_display()}"
+  
