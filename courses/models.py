@@ -6,7 +6,7 @@ class Course(models.Model):
     code = models.CharField(max_length=20, unique=True)
     capacity = models.PositiveIntegerField(default=0)
     professor = models.CharField(max_length=150)
-    day = models.CharField(max_length=20)
+    day = models.CharField(max_length=100)
     time = models.CharField(max_length=20)
     location = models.CharField(max_length=100)
     prerequisites = models.ManyToManyField('self', symmetrical=False, blank=True)
