@@ -28,7 +28,7 @@ class CourseSerializer(serializers.ModelSerializer):
         if not value.isdigit():
             raise serializers.ValidationError("Course code must be a number")
 
-        if len(value) < 1 or len(value) > 8:
+        if len(value) < 2 or len(value) > 7:
             raise serializers.ValidationError("Course code must be between 1 and 8 digits")
 
         if Course.objects.filter(code=value).exclude(id=self.instance.id if self.instance else None).exists():
