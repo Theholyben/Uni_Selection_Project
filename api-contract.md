@@ -20,27 +20,20 @@
   "location": "Lab 4", 
   "units": 1
 }
-Validation Rules:
+```
 
-code: 2-7 digits, unique, required
+**Validation Rules:**
+* `code`: 2-7 digits, unique, required
+* `name`: non-empty, required
+* `capacity`: integer, ≥ 0, optional (default: 0)
+* `units`: 1, 2, or 3, optional (default: 1)  
+* `professor`: optional (can be empty or omitted)
+* `day`: optional (can be empty or omitted)
+* `time`: optional (can be empty or omitted)
+* `location`: optional (can be empty or omitted)
 
-name: non-empty, required
-
-capacity: integer, ≥ 0, optional (default: 0)
-
-units: 1, 2, or 3, optional (default: 1)
-
-professor: optional (can be empty or omitted)
-
-day: optional (can be empty or omitted)
-
-time: optional (can be empty or omitted)
-
-location: optional (can be empty or omitted)
-
-Response Example (201 Created):
-
-json
+**Response Example (201 Created):**
+```json
 {
   "id": 1,
   "code": "123456",
@@ -52,22 +45,21 @@ json
   "location": "Lab 4",
   "units": 1
 }
-Response Codes:
+```
 
-201 Created: Course successfully created
+**Response Codes:**
+* `201 Created`: Course successfully created
+* `403 Forbidden`: User is not admin
+* `400 Bad Request`: Validation failed
 
-403 Forbidden: User is not admin
+### 2. List All Courses  
+**GET** `/courses/`
 
-400 Bad Request: Validation failed
+### 3. Get Course Details
+**GET** `/courses/{id}/`
 
-2. List All Courses
-GET /courses/
+### 4. Update Course
+**PUT** `/courses/{id}/`
 
-3. Get Course Details
-GET /courses/{id}/
-
-4. Update Course
-PUT /courses/{id}/
-
-5. Delete Course
-DELETE /courses/{id}/
+### 5. Delete Course  
+**DELETE** `/courses/{id}/`
