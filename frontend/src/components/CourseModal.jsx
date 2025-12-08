@@ -93,19 +93,30 @@ function CourseModal({ course, onClose, onSave }) {
   const days = ['شنبه', 'یکشنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه']
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="p-6 border-b border-gray-200">
+    <div className="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
+      <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all border-2 border-blue-100" onClick={(e) => e.stopPropagation()}>
+        <div className="p-6 border-b-2 border-blue-100 bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
           <div className="flex justify-between items-center">
-            <h2 className="text-2xl font-bold text-gray-800">
-              {course ? 'ویرایش درس' : 'افزودن درس جدید'}
-            </h2>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 rounded-xl shadow-lg">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  {course ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
+                  )}
+                </svg>
+              </div>
+              <h2 className="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                {course ? 'ویرایش درس' : 'افزودن درس جدید'}
+              </h2>
+            </div>
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="p-2 rounded-xl text-gray-400 hover:text-gray-600 hover:bg-white transition-all duration-200 shadow-sm hover:shadow-md"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
@@ -262,19 +273,25 @@ function CourseModal({ course, onClose, onSave }) {
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end gap-4 pt-4 border-t border-gray-200">
+          <div className="flex justify-end gap-4 pt-6 border-t-2 border-gray-200">
             <button
               type="button"
               onClick={onClose}
-              className="btn-secondary"
+              className="btn-secondary flex items-center gap-2 font-semibold"
             >
-              انصراف
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              <span>انصراف</span>
             </button>
             <button
               type="submit"
-              className="btn-primary"
+              className="btn-primary flex items-center gap-2 font-bold text-lg px-8"
             >
-              {course ? 'ذخیره تغییرات' : 'افزودن درس'}
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+              </svg>
+              <span>{course ? 'ذخیره تغییرات' : 'افزودن درس'}</span>
             </button>
           </div>
         </form>
