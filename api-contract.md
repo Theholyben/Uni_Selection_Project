@@ -63,3 +63,64 @@
 
 ### 5. Delete Course  
 **DELETE** `/courses/{id}/`
+<<<<<<< HEAD
+
+
+
+## 1. Authentication – JWT
+
+### 1.1 Login & Obtain Tokens
+```
+POST /token/
+Content-Type: application/x-www-form-urlencoded
+```
+**Request Example:**
+```
+username=admin&password=123456
+```
+
+**Success Response (200 OK):**
+```json
+{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxxxxxxxxxxxxxxxxxxxxxx",
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.yyyyyyyyyyyyyyyyyyyyyyyyy"
+}
+```
+
+**Error Response (401 Unauthorized):**
+```json
+{
+  "detail": "No active account found with the given credentials"
+}
+```
+
+### 1.2 Refresh Access Token
+```
+POST /token/refresh/
+Content-Type: application/json
+```
+**Request Example:**
+```json
+{
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.xxxxxxxxxxxxxxxxxxxxxxxxx"
+}
+```
+
+**Success Response (200 OK):**
+```json
+{
+  "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.newaccesstokenhere"
+}
+```
+
+**Authentication Header for All Protected Endpoints:**
+```
+Authorization: Bearer <access_token>
+```
+
+**Role-Based Permission:**
+- Only users with `role = "ADMIN"` can perform CRUD operations on courses (`IsAdminUser` custom permission)
+- All authenticated users can view course list
+```
+=======
+>>>>>>> Develop
