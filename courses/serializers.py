@@ -37,8 +37,8 @@ class CourseSerializer(serializers.ModelSerializer):
     def validate_units(self, value):
         if not isinstance(value, int):
             raise serializers.ValidationError("Units must be an integer")
-        if value not in [1, 2, 3]:
-            raise serializers.ValidationError("Units must be 1, 2 or 3")
+        if value not in [1, 2, 3, 4]:
+            raise serializers.ValidationError("Units must be 1, 2, 3 or 4")
         return value
 
     def validate(self, attrs):
