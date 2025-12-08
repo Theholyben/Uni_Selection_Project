@@ -63,6 +63,7 @@
 
 ### 5. Delete Course  
 **DELETE** `/courses/{id}/`
+<<<<<<< HEAD
 
 
 
@@ -121,3 +122,5 @@ Authorization: Bearer <access_token>
 - Only users with `role = "ADMIN"` can perform CRUD operations on courses (`IsAdminUser` custom permission)
 - All authenticated users can view course list
 ```
+=======
+>>>>>>> Develop
