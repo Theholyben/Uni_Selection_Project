@@ -65,7 +65,7 @@
 **DELETE** `/courses/{id}/`
 
 
-```markdown
+
 ## 1. Authentication – JWT
 
 ### 1.1 Login & Obtain Tokens
