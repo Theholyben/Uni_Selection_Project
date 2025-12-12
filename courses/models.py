@@ -14,3 +14,20 @@ class Course(models.Model):
 
     def __str__(self):
         return f"{self.code} - {self.name}"
+
+
+
+class Prerequisite(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='prerequisites')
+    prerequisite = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='required_for')
+    
+    class Meta:
+        unique_together = ('course', 'prerequisite')
+
+class EnrolledCourse(models.Model):
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='enrollments')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='enrollments')
+    enrolled_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('student', 'course')
