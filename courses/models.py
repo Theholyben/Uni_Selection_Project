@@ -31,3 +31,11 @@ class EnrolledCourse(models.Model):
     
     class Meta:
         unique_together = ('student', 'course')
+
+
+class UnitLimit(models.Model):
+    min_units = models.PositiveIntegerField(default=12)
+    max_units = models.PositiveIntegerField(default=20)
+    
+    def __str__(self):
+        return f"حداقل {self.min_units} - حداکثر {self.max_units} واحد"        
