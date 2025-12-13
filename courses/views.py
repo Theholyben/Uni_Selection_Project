@@ -64,3 +64,18 @@ def create(self, request):
         
         enrollment = EnrolledCourse.objects.create(student=student, course=course)
         return Response({"detail": "درس با موفقیت اخذ شد"}, status=201)
+
+
+
+class ProfessorCourseViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        return Course.objects.filter(professor=self.request.user.username)
+    
+    @action(detail=True, methods=['get'])
+    def students(self, request, pk=None):
+        course = self.get_object()
+        students = course.enrollments.select_related('student')
+        serializer = UserSerializer([e.student for e in students], many=True)
+        return Response(serializer.data)
