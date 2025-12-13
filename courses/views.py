@@ -21,8 +21,29 @@ class EnrollmentViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         return EnrolledCourse.objects.filter(student=self.request.user)
-    
-    def create(self, request):
+
+@action(detail=False, methods=['get'])
+def schedule(self, request):
+        enrollments = self.get_queryset()
+        schedule = {}
+        
+        for enrollment in enrollments:
+            course = enrollment.course
+            day = course.day or "نامشخص"
+            time = course.time or "نامشخص"
+            name = course.name
+            
+            if day not in schedule:
+                schedule[day] = []
+            schedule[day].append(f"{name} ({time})")
+        
+        ordered_days = ["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"]
+        ordered_schedule = {day: schedule.get(day, []) for day in ordered_days if day in schedule}
+        
+        return Response(ordered_schedule)
+
+
+def create(self, request):
         course_id = request.data.get('course_id')
         course = Course.objects.get(id=course_id)
         student = request.user
