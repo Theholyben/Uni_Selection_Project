@@ -1,11 +1,12 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAdminUser
 from .models import Course
+from .models import Prerequisite
 from .serializers import CourseSerializer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets
-
+from rest_framework.permissions import IsAuthenticated
 
 
 class CourseViewSet(ModelViewSet):
@@ -13,7 +14,38 @@ class CourseViewSet(ModelViewSet):
     serializer_class = CourseSerializer
     permission_classes = [IsAdminUser]
 
+@action(detail=True, methods=['get'], permission_classes=[IsAdminUser])
+def prerequisites(self, request, pk=None):
+        course = self.get_object()
+        prereqs = course.prerequisites.all()  
+        serializer = CourseSerializer(prereqs, many=True)
+        return Response(serializer.data)
 
+@action(detail=True, methods=['post'], permission_classes=[IsAdminUser])
+def add_prerequisite(self, request, pk=None):
+        course = self.get_object()
+        prereq_id = request.data.get('prerequisite_course_id')
+        if not prereq_id:
+            return Response({"detail": "prerequisite_course_id الزامی است"}, status=400)
+        
+        try:
+            prereq = Course.objects.get(id=prereq_id)
+            Prerequisite.objects.create(course=course, prerequisite_course=prereq)
+            return Response({"detail": "پیش‌نیاز با موفقیت اضافه شد"}, status=201)
+        except Course.DoesNotExist:
+            return Response({"detail": "درس پیش‌نیاز یافت نشد"}, status=404)
+
+@action(detail=True, methods=['delete'], permission_classes=[IsAdminUser])
+def remove_prerequisite(self, request, pk=None):
+        course = self.get_object()
+        prereq_id = request.data.get('prerequisite_course_id')
+        if not prereq_id:
+            return Response({"detail": "prerequisite_course_id الزامی است"}, status=400)
+        
+        deleted = Prerequisite.objects.filter(course=course, prerequisite_course_id=prereq_id).delete()
+        if deleted[0] == 0:
+            return Response({"detail": "پیش‌نیاز یافت نشد"}, status=404)
+        return Response({"detail": "پیش‌نیاز با موفقیت حذف شد"}, status=200)
 
 
 class EnrollmentViewSet(viewsets.ModelViewSet):
@@ -84,3 +116,6 @@ class ProfessorCourseViewSet(viewsets.ReadOnlyModelViewSet):
         students = course.enrollments.select_related('student')
         serializer = UserSerializer([e.student for e in students], many=True)
         return Response(serializer.data)
+
+
+        

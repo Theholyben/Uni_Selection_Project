@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 
 class Course(models.Model):
     name = models.CharField(max_length=200)
@@ -18,14 +18,14 @@ class Course(models.Model):
 
 
 class Prerequisite(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='prerequisites')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='course_prerequisites')
     prerequisite = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='required_for')
     
     class Meta:
         unique_together = ('course', 'prerequisite')
 
 class EnrolledCourse(models.Model):
-    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name='enrollments')
+    student = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='enrollments')
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='enrollments')
     enrolled_at = models.DateTimeField(auto_now_add=True)
     
