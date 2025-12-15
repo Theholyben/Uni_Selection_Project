@@ -44,28 +44,33 @@ def schedule(self, request):
 
 
 def create(self, request):
-        course_id = request.data.get('course_id')
-        course = Course.objects.get(id=course_id)
-        student = request.user
-        
-        missing_prereqs = course.prerequisites.exclude(id__in=student.enrollments.filter(course__grade__gte=10).values('course_id'))
-        if missing_prereqs.exists():
-            return Response({"detail": "پیش‌نیازها کامل نشده"}, status=400)
-        
-        if course.enrollments.count() >= course.capacity:
-            return Response({"detail": "ظرفیت کلاس پر شده"}, status=400)
-        
-        if EnrolledCourse.objects.filter(student=student, course=course).exists():
-            return Response({"detail": "این درس قبلاً اخذ شده"}, status=400)
-        
-        current_units = student.enrollments.aggregate(total=Sum('course__units'))['total'] or 0
-        if current_units + course.units > UnitLimit.objects.first().max_units:
-            return Response({"detail": "حداکثر واحد مجاز"}, status=400)
-        
-        enrollment = EnrolledCourse.objects.create(student=student, course=course)
-        return Response({"detail": "درس با موفقیت اخذ شد"}, status=201)
+ def parse_time(time_str):
+    if '-' in time_str:
+        start_str = time_str.split('-')[0].strip()
+        return int(start_str.replace(':', '')) if ':' in start_str else int(start_str) * 100
+    return 0
 
+ def has_time_conflict(student, new_course):
+    new_day = new_course.day
+    new_time = new_course.time  
+    new_start = parse_time(new_time)
+    
+    enrolled_courses = EnrolledCourse.objects.filter(student=student).select_related('course')
+    
+    for enrolled in enrolled_courses:
+        existing = enrolled.course
+        if existing.day == new_day:
+            existing_start = parse_time(existing.time)
+            if abs(existing_start - new_start) < 200:  
+                return True, existing
+    return False, None
 
+# استفاده
+ has_conflict, conflicting_course = has_time_conflict(student, course)
+ if has_conflict:
+    return Response({
+        "detail": f"تداخل زمانی با درس '{conflicting_course.name}' در روز {new_day} ساعت {conflicting_course.time}"
+    }, status=400)
 
 class ProfessorCourseViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
