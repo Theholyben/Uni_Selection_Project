@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تنظیم حداقل و حداکثر واحد - پنل ادمین</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- نوار ناوبری -->
+  <nav class="bg-purple-800 text-white p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">پنل مدیریت واحدها</h1>
+      <div class="space-x-4">
+        <a href="dashboard.html" class="hover:underline">داشبورد</a>
+        <a href="courses.html" class="hover:underline">لیست دروس</a>
+        <a href="admin-prerequisites.html" class="hover:underline">مدیریت پیش‌نیازها</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mx-auto mt-10 px-4 max-w-3xl">
+    <!-- هشدار اگر ادمین نیست -->
+    <div id="notAdminAlert" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 hidden">
+      <p>شما دسترسی ادمین ندارید. تنها مدیر سیستم می‌تواند تنظیمات واحدها را تغییر دهد.</p>
+    </div>
+
+    <!-- بخش اصلی -->
+    <div id="adminContent" class="bg-white rounded-2xl shadow-xl p-8 hidden">
+      <h2 class="text-2xl font-bold text-purple-700 mb-6">تنظیم حداقل و حداکثر واحد</h2>
+      <form id="unitLimitsForm" class="space-y-6">
+        <div>
+          <label class="block text-gray-700 mb-2">حداقل واحد:</label>
+          <input type="number" id="minUnits" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" required>
+        </div>
+        <div>
+          <label class="block text-gray-700 mb-2">حداکثر واحد:</label>
+          <input type="number" id="maxUnits" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500" required>
+        </div>
+        <div class="flex justify-end">
+          <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition duration-200">
+            ثبت تغییرات
+          </button>
+        </div>
+      </form>
+      <div id="unitSuccess" class="mt-4 p-3 bg-green-100 text-green-700 rounded hidden"></div>
+      <div id="unitError" class="mt-4 p-3 bg-red-100 text-red-700 rounded hidden"></div>
+    </div>
+  </div>
+
+  <script type="module" src="./js/admin-unit-limits.js"></script>
+</body>
+</html>
