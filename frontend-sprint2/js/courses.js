@@ -36,13 +36,12 @@ function renderCourses(courses) {
     <div class="bg-white p-6 rounded-xl shadow hover:shadow-2xl transition">
       <h3 class="text-xl font-bold text-purple-700 mb-2">${course.name || 'نامشخص'}</h3>
       <p class="text-gray-600">کد: ${course.code || '—'}</p>
-      <p class="text-gray-600">استاد: ${course.professor_name || 'نامشخص'}</p>
-      <p class="text-gray-600">ظرفیت باقی‌مانده: 
-        <span class="${course.remaining_capacity <= 5 ? 'text-red-600 font-bold' : 'text-green-600'}">
-          ${course.remaining_capacity}/${course.capacity}
-        </span>
+      <p class="text-gray-600">استاد: ${course.professor || 'نامشخص'}</p>
+      <p class="text-gray-600">ظرفیت: ${course.capacity ?? '—'}</p>
+      <p class="text-sm text-gray-500 mt-4">
+        زمان برگزاری: ${course.day || '—'} ${course.time || '—'}
       </p>
-      <p class="text-sm text-gray-500 mt-4">زمان برگزاری: ${course.schedule || 'نامشخص'}</p>
+      <p class="text-sm text-gray-500">محل برگزاری: ${course.location || '—'}</p>
       <a href="course-detail.html?id=${course.id}" 
          class="block mt-6 bg-purple-600 text-white py-2 rounded text-center hover:bg-purple-700 transition">
         مشاهده جزئیات
@@ -55,7 +54,7 @@ function filterCourses() {
   const search = document.getElementById('searchInput')?.value.toLowerCase() || '';
   const filtered = allCourses.filter(course => {
     return (course.name?.toLowerCase().includes(search) || false) ||
-           (course.professor_name?.toLowerCase().includes(search) || false);
+           (course.professor?.toLowerCase().includes(search) || false);
   });
   renderCourses(filtered);
 }
