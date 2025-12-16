@@ -18,17 +18,19 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
       localStorage.setItem('refresh', data.refresh || '');
       localStorage.setItem('user', JSON.stringify(data.user || {}));
 
-      if (username === 'admin') {
-        window.location.href = '../frontend-sprint1/index.html'; 
+      const role = data.user?.role;
+
+      if (role === 'admin') {
+        window.location.href = '../frontend-sprint1/index.html';
       } else {
-        window.location.href = 'dashboard.html'; 
+        window.location.href = 'dashboard.html';
       }
     } else {
       errorMsg.textContent = data.detail || 'نام کاربری یا رمز اشتباه است';
       errorMsg.classList.remove('hidden');
     }
   } catch (err) {
-    errorMsg.textContent = 'بک‌اند هنوز آماده نیست ';
+    errorMsg.textContent = 'بک‌اند هنوز آماده نیست';
     errorMsg.classList.remove('hidden');
   }
 });
