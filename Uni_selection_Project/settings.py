@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'courses',
     "Accounts",
-    'rest_framework',
     'rest_framework_simplejwt',
     'corsheaders',
     'drf_yasg',
