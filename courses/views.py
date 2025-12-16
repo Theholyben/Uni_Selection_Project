@@ -7,12 +7,15 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = [IsAdminUser]
+    filter_backends = [SearchFilter]
+    search_fields = ['name', 'professor']
+
 
 @action(detail=True, methods=['get'], permission_classes=[IsAdminUser])
 def prerequisites(self, request, pk=None):
