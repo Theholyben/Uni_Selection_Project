@@ -10,7 +10,7 @@ if (!token || !user || !user.role) {
   location.href = 'index.html';
 }
 
-const role = user.role;
+const role = (user.role || '').toLowerCase();
 
 if (role === 'admin') {
   document.getElementById('adminSection')?.classList.remove('hidden');
