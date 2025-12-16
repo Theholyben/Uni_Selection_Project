@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>برنامه هفتگی</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <nav class="bg-purple-700 text-white p-4 shadow-lg">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold">برنامه هفتگی</h1>
+      <a href="dashboard.html" class="hover:underline">داشبورد</a>
+    </div>
+  </nav>
+
+  <div class="container mx-auto mt-8 px-4 overflow-x-auto">
+    <div class="bg-white rounded-xl shadow-xl">
+      <table class="w-full text-center table-fixed">
+        <thead class="bg-purple-700 text-white">
+          <tr>
+            <th class="py-4 border">ساعت \ روز</th>
+            <th class="py-4 border">شنبه</th>
+            <th class="py-4 border">یکشنبه</th>
+            <th class="py-4 border">دوشنبه</th>
+            <th class="py-4 border">سه‌شنبه</th>
+            <th class="py-4 border">چهارشنبه</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleBody">
+          <!-- داده‌ها از بک‌اند پر می‌شوند -->
+        </tbody>
+      </table>
+      <div id="loadingMsg" class="p-4 text-center text-gray-600">در حال بارگذاری...</div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { apiFetch } from './js/api.js';
+
+    async function loadSchedule() {
+      const body = document.getElementById('scheduleBody');
+      const loadingMsg = document.getElementById('loadingMsg');
+      body.innerHTML = '';
+      loadingMsg.classList.remove('hidden');
+
+      try {
+        const schedule = await apiFetch('/schedule/'); 
+
+        body.innerHTML = schedule.html; 
+        loadingMsg.classList.add('hidden');
+      } catch (err) {
+        loadingMsg.classList.add('hidden');
+        body.innerHTML = '<tr><td colspan="6" class="py-8 text-red-600">برنامه هنوز ثبت نشده است</td></tr>';
+      }
+    }
+
+    loadSchedule();
+  </script>
+</body>
+</html>

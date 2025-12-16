@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>داشبورد</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ناوبری -->
+  <nav class="uni-nav">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h1>داشبورد کلی</h1>
+      <button id="logoutBtn" class="uni-button">خروج</button>
+    </div>
+  </nav>
+
+  <!-- محتوای اصلی -->
+  <main class="container mx-auto mt-10 text-center">
+    <h2 class="uni-title">به سیستم انتخاب واحد خوش آمدید</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto">
+
+      <!-- ادمین -->
+      <div id="adminSection" class="hidden col-span-2 flex flex-col gap-6">
+        <button onclick="window.location.href='admin-prerequisites.html'" class="uni-button">
+          مدیریت پیش‌نیازها
+        </button>
+
+        <button onclick="window.location.href='admin-unit-limits.html'" class="uni-button">
+          تنظیم حداقل/حداکثر واحد
+        </button>
+
+        <button onclick="window.location.href='http://localhost:3000/admin-panel'" class="uni-button">
+          ورود به پنل مدیریت دروس (React)
+        </button>
+      </div>
+
+      <!-- استاد -->
+      <div id="professorSection" class="hidden col-span-2">
+        <button onclick="window.location.href='professor-students.html'" class="uni-button">
+          لیست دانشجویان
+        </button>
+      </div>
+
+      <!-- دانشجو -->
+      <div id="studentSection" class="hidden col-span-2 flex flex-col gap-6">
+        <button onclick="window.location.href='courses.html'" class="uni-button">
+          لیست دروس
+        </button>
+
+        <button onclick="window.location.href='schedule.html'" class="uni-button">
+          برنامه هفتگی
+        </button>
+
+        <button onclick="window.location.href='search.html'" class="uni-button">
+          جستجوی دروس
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- دکمه تغییر حالت شب/روز -->
+  <button id="modeToggle" class="uni-toggle-mode">🌙</button>
+
+  <script type="module" src="./js/dashboard.js"></script>
+  <script>
+    // تغییر حالت شب/روز
+    const modeToggle = document.getElementById('modeToggle');
+    modeToggle?.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      modeToggle.textContent = document.body.classList.contains('dark-mode') ? "☀️" : "🌙";
+    });
+  </script>
+</body>
+</html>

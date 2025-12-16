@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ورود - انتخاب واحد</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Vazirmatn', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }</style>
+</head>
+<body class="flex min-h-screen items-center justify-center p-4">
+  <div class="w-full max-w-md rounded-2xl bg-white p-10 shadow-2xl">
+    <h1 class="mb-8 text-center text-3xl font-bold text-purple-700">ورود به سیستم</h1>
+    <form id="loginForm" class="space-y-6">
+      <input type="text" id="username" placeholder="شماره دانشجویی / کد استادی / admin" class="w-full rounded-lg border px-4 py-3" required>
+      <input type="password" id="password" placeholder="رمز عبور" class="w-full rounded-lg border px-4 py-3" required>
+      <button type="submit" class="w-full rounded-lg bg-purple-600 py-3 font-bold text-white hover:bg-purple-700">ورود</button>
+    </form>
+    <p id="errorMsg" class="mt-4 hidden text-center text-red-600"></p>
+  </div>
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>
