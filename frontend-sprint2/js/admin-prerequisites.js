@@ -1,4 +1,8 @@
+import { apiFetch } from './api.js';
+
 const getToken = () => localStorage.getItem('token');
+const courseSelect = document.getElementById('courseSelect');
+const prereqSelect = document.getElementById('prereqSelect');
 
 function showMessage(type, msg) {
   const ok = document.getElementById('addSuccess');
@@ -9,38 +13,29 @@ function showMessage(type, msg) {
 }
 
 async function loadPrerequisites() {
-  const token = getToken();
-  if (!token) return;
+  try {
+    const data = await apiFetch('/prerequisites/');
+    const tbody = document.getElementById('prereqTableBody');
+    const empty = document.getElementById('emptyMessage');
 
-  const res = await fetch('/api/prerequisites/', {
-    headers: { Authorization: `Bearer ${token}` }
-  });
+    tbody.innerHTML = '';
+    empty.classList.toggle('hidden', data.length !== 0);
 
-  if (res.status === 403) {
+    data.forEach(p => {
+      tbody.innerHTML += `
+        <tr>
+          <td class="px-6 py-4">${p.course || '—'}</td>
+          <td class="px-6 py-4">${p.prerequisite || '—'}</td>
+          <td class="px-6 py-4 text-right">
+            <button data-id="${p.id}" class="deleteBtn text-red-600">حذف</button>
+          </td>
+        </tr>`;
+    });
+  } catch (err) {
+    console.error(err);
     document.getElementById('notAdminAlert').classList.remove('hidden');
     document.getElementById('adminContent').classList.add('hidden');
-    return;
   }
-
-  document.getElementById('adminContent').classList.remove('hidden');
-
-  const data = await res.json();
-  const tbody = document.getElementById('prereqTableBody');
-  const empty = document.getElementById('emptyMessage');
-
-  tbody.innerHTML = '';
-  empty.classList.toggle('hidden', data.length !== 0);
-
-  data.forEach(p => {
-    tbody.innerHTML += `
-      <tr>
-        <td class="px-6 py-4">${p.course}</td>
-        <td class="px-6 py-4">${p.prerequisite}</td>
-        <td class="px-6 py-4 text-right">
-          <button data-id="${p.id}" class="deleteBtn text-red-600">حذف</button>
-        </td>
-      </tr>`;
-  });
 }
 
 document.getElementById('addPrereqForm')
@@ -54,7 +49,7 @@ document.getElementById('addPrereqForm')
       prerequisite_id: prereqSelect.value
     };
 
-    const res = await fetch('/api/prerequisites/', {
+    const res = await fetch('http://127.0.0.1:8000/api/prerequisites/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -63,9 +58,14 @@ document.getElementById('addPrereqForm')
       body: JSON.stringify(body)
     });
 
-    res.ok
-      ? (showMessage('success', 'ثبت شد'), e.target.reset(), loadPrerequisites())
-      : showMessage('error', (await res.json()).detail || 'خطا');
+    if (res.ok) {
+      showMessage('success', 'ثبت شد');
+      e.target.reset();
+      loadPrerequisites();
+    } else {
+      const errData = await res.json();
+      showMessage('error', errData.detail || 'خطا');
+    }
   });
 
 document.getElementById('prereqTableBody')
@@ -73,12 +73,16 @@ document.getElementById('prereqTableBody')
     if (!e.target.classList.contains('deleteBtn')) return;
     const token = getToken();
 
-    await fetch(`/api/prerequisites/${e.target.dataset.id}/`, {
+    const res = await fetch(`http://127.0.0.1:8000/api/prerequisites/${e.target.dataset.id}/`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${token}` }
     });
 
-    loadPrerequisites();
+    if (res.ok) {
+      loadPrerequisites();
+    } else {
+      showMessage('error', 'خطا در حذف پیش‌نیاز');
+    }
   });
 
 loadPrerequisites();
