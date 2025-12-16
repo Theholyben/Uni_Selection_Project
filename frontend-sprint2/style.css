@@ -1,0 +1,86 @@
+/* ====== تنظیمات کلی ====== */
+body {
+  font-family: "Tahoma", "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ====== حالت روز ====== */
+:root {
+  --bg-color: #f9f9f9;
+  --text-color: #333;
+  --primary-color: #6b21a8; /* بنفش دانشگاهی */
+  --card-bg: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* ====== حالت شب ====== */
+body.dark-mode {
+  --bg-color: #1e1e2f;
+  --text-color: #e0e0e0;
+  --primary-color: #9d4edd;
+  --card-bg: #2a2a3d;
+  --card-shadow: rgba(0, 0, 0, 0.5);
+}
+
+/* ====== ناوبری اختصاصی ====== */
+.uni-nav {
+  background-color: var(--primary-color);
+  color: #fff;
+  padding: 1rem;
+  box-shadow: 0 2px 6px var(--card-shadow);
+}
+
+.uni-nav h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* ====== دکمه اختصاصی ====== */
+.uni-button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: var(--primary-color);
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.uni-button:hover {
+  background-color: #4c1d95;
+}
+
+/* ====== کارت اختصاصی ====== */
+.uni-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 10px var(--card-shadow);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ====== تیترها ====== */
+.uni-title {
+  color: var(--primary-color);
+}
+
+/* ====== دکمه تغییر حالت شب/روز ====== */
+.uni-toggle-mode {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
