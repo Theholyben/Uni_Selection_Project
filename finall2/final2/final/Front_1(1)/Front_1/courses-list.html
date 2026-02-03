@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دروس ارائه شده - سیستم انتخاب واحد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --white: #ffffff;
+            --light: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: auto;
+            max-width: 2000px;
+            margin: auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-section {
+            background: var(--white);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.1);
+            text-align: center;
+        }
+
+        .search-group {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-group label {
+            font-weight: 700;
+            color: var(--gray-800);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .search-input {
+            padding: 18px 24px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+            background: var(--light);
+            width: 100%;
+            font-family: inherit;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        .courses-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 30px;
+        }
+
+        .course-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 35px;
+            box-shadow: 0 12px 40px rgba(59, 130, 246, 0.12);
+            border: 2px solid var(--gray-200);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(59, 130, 246, 0.2);
+            border-color: var(--primary-light);
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+
+        .course-code {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+
+        .course-capacity {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 15px;
+            color: var(--gray-600);
+            background: var(--light);
+            padding: 8px 16px;
+            border-radius: 8px;
+        }
+
+        .course-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--gray-800);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .course-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--gray-600);
+            font-size: 16px;
+        }
+
+        .detail-item i {
+            width: 28px;
+            text-align: center;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .prerequisites {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-right: 5px solid var(--warning);
+        }
+
+        .prerequisites h4 {
+            font-size: 17px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--warning);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .prerequisites-list {
+            list-style: none;
+            padding-right: 20px;
+        }
+
+        .prerequisites-list li {
+            padding: 8px 0;
+            color: var(--gray-600);
+            position: relative;
+            font-size: 15px;
+        }
+
+        .prerequisites-list li::before {
+            content: "•";
+            position: absolute;
+            right: -20px;
+            color: var(--warning);
+            font-size: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 80px;
+            font-size: 18px;
+            color: var(--gray-600);
+            display: none;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .loading-spinner {
+            border: 5px solid var(--gray-200);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.2s linear infinite;
+            margin: 0 auto 25px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray-600);
+            font-size: 14px;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.1);
+        }
+
+        .back-btn {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .back-btn button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px 36px;
+            border-radius: var(--border-radius);
+            font-weight: 700;
+            font-size: 17px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
+        }
+
+        @media (max-width: 1200px) {
+            .courses-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .courses-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 30px 25px;
+            }
+            
+            .header h1 {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+                margin-bottom: 30px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .search-section {
+                padding: 25px 20px;
+            }
+            
+            .course-card {
+                padding: 25px;
+            }
+            
+            .course-title {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>
+                <i class="fas fa-book-open"></i>
+                دروس ارائه شده 
+            </h1>
+            <p>مشاهده و جستجوی دروس ارائه شده در ترم جاری</p>
+        </header>
+
+        <section class="search-section">
+            <div class="search-group">
+                <label for="searchCourse">
+                    <i class="fas fa-search"></i>
+                    جستجوی درس
+                </label>
+                <input type="text" 
+                    id="searchCourse" 
+                    class="search-input" 
+                    placeholder="جستجو بر اساس نام درس یا استاد..."
+                    autocomplete="off">
+            </div>
+        </section>
+
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <p>در حال دریافت اطلاعات از سرور...</p>
+        </div>
+
+        <div id="coursesContainer" class="courses-container">
+        </div>
+
+        <div class="back-btn">
+            <button type="button" id="backBtn">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به داشبورد
+            </button>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+    
+    let allCourses = [];
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        loadCourses();
+        setupButtons();
+    });
+    
+    function setupButtons() {
+        const backBtn = document.querySelector('.back-btn button');
+        if (backBtn) {
+            backBtn.onclick = function() {
+                window.location.href = 'student-dashboard.html';
+            };
+        }
+        
+        const searchBtn = document.getElementById('searchBtn');
+        if (searchBtn) {
+            searchBtn.onclick = function() {
+                performSearch();
+            };
+        }
+    }
+    
+    async function loadCourses() {
+        showLoading();
+        
+        try {
+            const courses = await StudentAPI.getAllCourses();
+            allCourses = courses;
+            showCourses(courses);
+        } catch (error) {
+            console.error('خطا:', error);
+            showError(error.message || 'خطا در ارتباط با سرور');
+        } finally {
+            hideLoading();
+        }
+    }
+    
+    function showCourses(courses) {
+        const container = document.getElementById('coursesContainer');
+        
+        if (!courses || courses.length === 0) {
+            container.innerHTML = `
+                <div style="text-align: center; padding: 60px 20px; width: 100%;">
+                    <i class="fas fa-book" style="font-size: 64px; color: var(--gray-300);"></i>
+                    <h3 style="color: var(--gray-600); margin: 20px 0;">درسی یافت نشد</h3>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        courses.forEach(course => {
+            html += `
+                <div class="course-card">
+                    <div class="course-header">
+                        <span class="course-code">${course.code || 'بدون کد'}</span>
+                        <div class="course-capacity">
+                            <i class="fas fa-users"></i>
+                            ${course.currentStudents || 0}/${course.capacity || 0}
+                        </div>
+                    </div>
+                    
+                    <h3 class="course-title">${course.title || 'بدون عنوان'}</h3>
+                    
+                    <div class="course-details">
+                        <div class="detail-item">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <span>استاد: ${course.professor || 'نامشخص'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-clock"></i>
+                            <span>زمان: ${course.time || 'نامشخص'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>مکان: ${course.location || 'نامشخص'}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>واحد: ${course.units || 0} واحد</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+        
+        setupSearch();
+    }
+    
+    function setupSearch() {
+        const searchInput = document.getElementById('searchCourse');
+        if (!searchInput) return;
+        
+        searchInput.addEventListener('input', function() {
+            const searchText = this.value.toLowerCase().trim();
+            
+            if (searchText === '') {
+                showCourses(allCourses);
+                return;
+            }
+            
+            const filtered = allCourses.filter(course => {
+                const title = course.title || '';
+                const professor = course.professor || '';
+                const code = course.code || '';
+                
+                return (
+                    title.toLowerCase().includes(searchText) ||
+                    professor.toLowerCase().includes(searchText) ||
+                    code.toLowerCase().includes(searchText)
+                );
+            });
+            
+            showCourses(filtered);
+        });
+    }
+    
+    function performSearch() {
+        const searchInput = document.getElementById('searchCourse');
+        if (searchInput) {
+            searchInput.dispatchEvent(new Event('input'));
+        }
+    }
+    
+    function handleHttpError(statusCode) {
+        let message = '';
+        let redirect = false;
+        
+        switch(statusCode) {
+            case 400:
+                message = 'درخواست نامعتبر';
+                break;
+            case 401:
+                message = 'لطفاً دوباره وارد شوید';
+                localStorage.clear();
+                setTimeout(() => window.location.href = 'login.html', 2000);
+                redirect = true;
+                break;
+            case 403:
+                message = 'شما دسترسی ندارید';
+                break;
+            case 404:
+                message = 'صفحه مورد نظر یافت نشد';
+                break;
+            case 500:
+                message = 'خطای سرور';
+                break;
+            default:
+                message = `خطای سرور (کد: ${statusCode})`;
+        }
+        
+        showError(message, redirect);
+    }
+    
+    function showError(message, isRedirect = false) {
+        const container = document.getElementById('coursesContainer');
+        
+        let buttonHtml = '';
+        if (!isRedirect) {
+            buttonHtml = `
+                <button onclick="loadCourses()" style="
+                    background: var(--primary);
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    margin-top: 20px;
+                    cursor: pointer;
+                    font-family: inherit;
+                ">
+                    <i class="fas fa-redo"></i> تلاش مجدد
+                </button>
+            `;
+        } else {
+            buttonHtml = '<p style="color: var(--warning); margin-top: 20px;">در حال هدایت به صفحه ورود...</p>';
+        }
+        
+        container.innerHTML = `
+            <div style="text-align: center; padding: 80px 20px; width: 100%;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 64px; color: var(--error);"></i>
+                <h3 style="color: var(--error); margin: 20px 0;">خطا</h3>
+                <p style="color: var(--gray-600);">${message}</p>
+                ${buttonHtml}
+            </div>
+        `;
+    }
+    
+    function showLoading() {
+        const loading = document.getElementById('loading');
+        if (loading) loading.classList.add('active');
+    }
+    
+    function hideLoading() {
+        const loading = document.getElementById('loading');
+        if (loading) loading.classList.remove('active');
+    }
+    
+    document.getElementById('backBtn').addEventListener('click', function () {
+        window.location.href = 'student-dashboard.html';
+    });
+</script>
+</body>
+</html>
+    

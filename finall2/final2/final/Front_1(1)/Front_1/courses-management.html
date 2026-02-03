@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>مدیریت دروس</title>
+
+    <link href="https://v1.fontapi.ir/css/Vazirmatn" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+    :root {
+        --primary-blue: #3b82f6;
+        --primary-blue-light: #60a5fa;
+        --primary-blue-dark: #2563eb;
+        --primary-purple: #8b5cf6;
+        --primary-purple-light: #a78bfa;
+        --primary-purple-dark: #7c3aed;
+        --gradient-main: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-purple) 100%);
+        --gradient-reverse: linear-gradient(135deg, var(--primary-purple) 0%, var(--primary-blue) 100%);
+        --white: #ffffff;
+        --light: #f8fafc;
+        --gray-100: #f1f5f9;
+        --gray-200: #e2e8f0;
+        --gray-600: #475569;
+        --gray-800: #1e293b;
+        --danger: #ef4444;
+        --success: #10b981;
+        --border-radius: 16px;
+        --transition: all 0.3s ease;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', 'Vazirmatn', sans-serif;
+    }
+
+    body {
+        background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+        min-height: 100vh;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .page-container {
+        width: 100%;
+        max-width: 1600px;
+        min-height: calc(100vh - 40px);
+        background: var(--white);
+        border-radius: 24px;
+        box-shadow: 0 25px 60px rgba(37, 99, 235, 0.15);
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header {
+        background: var(--gradient-main);
+        color: white;
+        padding: 40px 30px;
+        text-align: center;
+        width: 100%;
+    }
+
+    .header h1 {
+        font-size: 36px;
+        font-weight: 800;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .header p {
+        font-size: 18px;
+        opacity: 0.95;
+        max-width: 800px;
+        margin: 0 auto 25px;
+    }
+
+    .academic-year {
+        display: inline-flex;
+        align-items: center;
+        gap: 15px;
+        background: rgba(255, 255, 255, 0.15);
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 16px;
+        backdrop-filter: blur(10px);
+        margin-top: 15px;
+    }
+
+    .content {
+        padding: 40px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-section {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(59, 130, 246, 0.1);
+        border: 2px solid var(--gray-200);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 40px;
+        animation: floatUpDown 4s ease-in-out infinite;
+    }
+
+    .form-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 6px;
+        background: linear-gradient(90deg, var(--primary-blue), var(--primary-purple));
+    }
+
+    @keyframes floatUpDown {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-8px);
+        }
+    }
+
+    .form-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--gray-800);
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 700;
+        color: var(--gray-800);
+        font-size: 16px;
+    }
+
+    .form-label.required::after {
+        content: " *";
+        color: var(--danger);
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 14px 20px;
+        border: 2px solid var(--gray-200);
+        border-radius: 12px;
+        font-size: 16px;
+        transition: var(--transition);
+        background: var(--white);
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--primary-blue);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    .form-select {
+        width: 100%;
+        padding: 14px 20px;
+        border: 2px solid var(--gray-200);
+        border-radius: 12px;
+        font-size: 16px;
+        background: var(--white);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .days-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 15px;
+    }
+
+    .day-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        padding: 10px 16px;
+        background: var(--white);
+        border: 2px solid var(--gray-200);
+        border-radius: 10px;
+        transition: var(--transition);
+        font-weight: 600;
+    }
+
+    .day-checkbox:hover {
+        border-color: var(--primary-purple);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(139, 92, 246, 0.1);
+    }
+
+    .day-checkbox input {
+        margin: 0;
+        cursor: pointer;
+        width: 18px;
+        height: 18px;
+    }
+
+    .form-actions {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 20px;
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 2px solid var(--gray-200);
+    }
+
+    .btn {
+        padding: 14px 25px;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        transition: var(--transition);
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        text-decoration: none;
+        width: auto;
+        margin-top: auto;
+        color: white;
+        background: var(--gradient-main);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 35px rgba(59, 130, 246, 0.4);
+        background: var(--gradient-reverse);
+    }
+
+    .table-section {
+        background: var(--white);
+        border-radius: var(--border-radius);
+        padding: 40px;
+        box-shadow: 0 10px 40px rgba(59, 130, 246, 0.1);
+        border: 2px solid var(--gray-200);
+        margin-bottom: 40px;
+    }
+
+    .table-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: var(--gray-800);
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .table-container {
+        overflow-x: auto;
+        border: 2px solid var(--gray-200);
+        border-radius: 12px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 800px;
+    }
+
+    th {
+        background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+        color: white;
+        padding: 20px;
+        font-weight: 700;
+        font-size: 18px;
+        text-align: center;
+        border: none;
+    }
+
+    th:first-child {
+        border-top-right-radius: 10px;
+    }
+
+    th:last-child {
+        border-top-left-radius: 10px;
+    }
+
+    td {
+        padding: 20px;
+        border-bottom: 2px solid var(--gray-200);
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    tr:hover {
+        background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(96, 165, 250, 0.05));
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    .btn-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        font-size: 18px;
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, var(--primary-blue), #3b82f6);
+        color: white;
+        box-shadow: 0 5px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-edit:hover {
+        background: linear-gradient(135deg, var(--primary-blue-light), #60a5fa);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+        box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-delete:hover {
+        background: linear-gradient(135deg, #f87171, #ef4444);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+    }
+
+    .alert {
+        padding: 20px 25px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        display: none;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .alert-success {
+        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        color: #065f46;
+        border: 2px solid #10b981;
+    }
+
+    .alert-error {
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        color: #991b1b;
+        border: 2px solid #ef4444;
+    }
+
+    .back-btn {
+        margin-top: 40px;
+        text-align: center;
+        padding-top: 40px;
+        border-top: 2px solid var(--gray-200);
+        width: 100%;
+    }
+
+    .back-btn button {
+        background: var(--gradient-main);
+        color: white;
+        padding: 16px 40px;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition);
+        border: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        min-width: 200px;
+        justify-content: center;
+    }
+
+    .back-btn button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 35px rgba(139, 92, 246, 0.4);
+        background: var(--gradient-reverse);
+    }
+
+    @media (max-width: 768px) {
+        body {
+            padding: 15px;
+        }
+        
+        .page-container {
+            min-height: calc(100vh - 30px);
+        }
+        
+        .header {
+            padding: 30px 20px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-section,
+        .table-section {
+            padding: 30px;
+        }
+        
+        table {
+            min-width: 600px;
+        }
+        
+        .back-btn button {
+            padding: 14px 30px;
+            min-width: 180px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .header h1 {
+            font-size: 24px;
+        }
+        
+        .academic-year {
+            font-size: 14px;
+            padding: 10px 20px;
+        }
+        
+        .form-title,
+        .table-title {
+            font-size: 20px;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <div class="header">
+        <h1>
+            <i class="fas fa-book"></i>
+            مدیریت دروس
+        </h1>
+        <p>ایجاد، ویرایش و مدیریت دروس آموزشی</p>
+        <div class="academic-year" id="semester">
+            نیمسال اول ۱۴۰۴
+        </div>
+    </div>
+
+    <div class="alert" id="alert"></div>
+
+    <div class="form-section">
+        <h3 class="form-title">
+            <i class="fas fa-plus-circle"></i>
+            تعریف درس جدید
+        </h3>
+
+        <form id="courseForm">
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label class="form-label required">نام درس</label>
+                    <input type="text" class="form-input" id="name">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">کد درس</label>
+                    <input type="text" class="form-input" id="code">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">نام استاد</label>
+                    <input type="text" class="form-input" id="professor">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">ظرفیت کلاس</label>
+                    <input type="number" class="form-input" id="capacity" value="30">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">ساعت برگزاری</label>
+                    <input type="text" class="form-input" id="time">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">تعداد واحد</label>
+                    <select class="form-select" id="units">
+                        <option value="1">1 واحد</option>
+                        <option value="2">2 واحد</option>
+                        <option value="3" selected>3 واحد</option>
+                        <option value="4">4 واحد</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">مکان برگزاری</label>
+                    <input type="text" class="form-input" id="location">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">پیش‌نیاز درس</label>
+                    <input type="text" class="form-input" id="prerequisite">
+                </div>
+
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label class="form-label">روزهای برگزاری (حداکثر ۲ روز)</label>
+                    <div class="days-container">
+                        <label class="day-checkbox"><input type="checkbox" value="شنبه"> شنبه</label>
+                        <label class="day-checkbox"><input type="checkbox" value="یکشنبه"> یکشنبه</label>
+                        <label class="day-checkbox"><input type="checkbox" value="دوشنبه"> دوشنبه</label>
+                        <label class="day-checkbox"><input type="checkbox" value="سه‌شنبه"> سه‌شنبه</label>
+                        <label class="day-checkbox"><input type="checkbox" value="چهارشنبه"> چهارشنبه</label>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn" id="submitBtn">
+                    <i class="fas fa-save"></i>
+                    <span id="submitBtnText">ذخیره درس</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-section">
+        <h3 class="table-title">
+            <i class="fas fa-list"></i>
+            لیست دروس
+        </h3>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>نام درس</th>
+                        <th>کد درس</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody id="courseTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="back-btn">
+        <button onclick="goToDashboard()">
+            <i class="fas fa-arrow-right"></i>
+            بازگشت به داشبورد
+        </button>
+    </div>
+
+</div>
+
+<script>
+const BASE_URL = 'http://localhost:8000/api/';
+const token = localStorage.getItem('token');
+
+let currentCourseId = null;
+
+/* -------------------- ALERT -------------------- */
+function showAlert(message, type = 'success') {
+    const alertBox = document.getElementById('alert');
+    alertBox.textContent = message;
+    alertBox.className = `alert alert-${type}`;
+    alertBox.style.display = 'block';
+
+    setTimeout(() => {
+        alertBox.style.display = 'none';
+    }, 4000);
+}
+
+/* -------------------- LOAD COURSES -------------------- */
+async function loadCourses() {
+    try {
+        const response = await fetch(`${BASE_URL}admin/courses`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch courses');
+        }
+
+        const courses = await response.json();
+        renderCourses(courses);
+
+    } catch (error) {
+        console.error(error);
+        showAlert('خطا در دریافت دروس', 'error');
+    }
+}
+
+/* -------------------- RENDER TABLE -------------------- */
+function renderCourses(courses) {
+    const table = document.getElementById('courseTable');
+
+    if (!Array.isArray(courses) || courses.length === 0) {
+        table.innerHTML = `
+            <tr>
+                <td colspan="3" style="text-align:center">
+                    درسی یافت نشد
+                </td>
+            </tr>
+        `;
+        return;
+    }
+
+    table.innerHTML = courses.map(course => `
+        <tr>
+            <td>${course.name}</td>
+            <td>${course.code}</td>
+            <td>
+                <div class="action-buttons">
+                    <button class="btn-icon btn-edit"
+                        onclick="editCourse('${course.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn-icon btn-delete"
+                        onclick="deleteCourse('${course.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+/* -------------------- FORM SUBMIT -------------------- */
+document.getElementById('courseForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const courseData = {
+        name: document.getElementById('name').value.trim(),
+        code: document.getElementById('code').value.trim(),
+        professor: document.getElementById('professor').value.trim(),
+        capacity: Number(document.getElementById('capacity').value),
+        time: document.getElementById('time').value.trim(),
+        units: Number(document.getElementById('units').value),
+        location: document.getElementById('location').value.trim(),
+        prerequisite: document.getElementById('prerequisite').value.trim(),
+        schedule: getSelectedDays()
+    };
+
+    const url = currentCourseId
+        ? `${BASE_URL}admin/courses/${currentCourseId}`
+        : `${BASE_URL}admin/courses`;
+
+    const method = currentCourseId ? 'PUT' : 'POST';
+
+    try {
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(courseData)
+        });
+
+        if (!response.ok) {
+            throw new Error('Submit failed');
+        }
+
+        showAlert(
+            currentCourseId ? 'درس ویرایش شد' : 'درس با موفقیت اضافه شد',
+            'success'
+        );
+
+        resetForm();
+        loadCourses();
+
+    } catch (error) {
+        console.error(error);
+        showAlert('خطا در ذخیره اطلاعات', 'error');
+    }
+});
+
+/* -------------------- EDIT COURSE -------------------- */
+async function editCourse(courseId) {
+    try {
+        const response = await fetch(`${BASE_URL}admin/courses/${courseId}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Fetch course failed');
+        }
+
+        const course = await response.json();
+        currentCourseId = courseId;
+
+        document.getElementById('name').value = course.name || '';
+        document.getElementById('code').value = course.code || '';
+        document.getElementById('professor').value = course.professor || '';
+        document.getElementById('capacity').value = course.capacity || 30;
+        document.getElementById('time').value = course.time || '';
+        document.getElementById('units').value = course.units || 3;
+        document.getElementById('location').value = course.location || '';
+        document.getElementById('prerequisite').value = course.prerequisite || '';
+
+        selectDays(course.schedule || []);
+
+        document.getElementById('submitBtnText').textContent = 'به‌روزرسانی درس';
+
+    } catch (error) {
+        console.error(error);
+        showAlert('خطا در دریافت اطلاعات درس', 'error');
+    }
+}
+
+/* -------------------- DELETE COURSE -------------------- */
+async function deleteCourse(courseId) {
+    if (!confirm('آیا از حذف این درس مطمئن هستید؟')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${BASE_URL}admin/courses/${courseId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Delete failed');
+        }
+
+        showAlert('درس حذف شد', 'success');
+        loadCourses();
+
+    } catch (error) {
+        console.error(error);
+        showAlert('خطا در حذف درس', 'error');
+    }
+}
+
+/* -------------------- DAYS -------------------- */
+function getSelectedDays() {
+    return Array.from(
+        document.querySelectorAll('.day-checkbox input:checked')
+    ).map(cb => cb.value);
+}
+
+function selectDays(days) {
+    document.querySelectorAll('.day-checkbox input').forEach(cb => {
+        cb.checked = days.includes(cb.value);
+    });
+}
+
+/* -------------------- RESET FORM -------------------- */
+function resetForm() {
+    document.getElementById('courseForm').reset();
+    currentCourseId = null;
+    document.getElementById('submitBtnText').textContent = 'ذخیره درس';
+
+    document.querySelectorAll('.day-checkbox input').forEach(cb => {
+        cb.checked = false;
+    });
+}
+
+/* -------------------- DASHBOARD -------------------- */
+function goToDashboard() {
+    window.location.href = 'admin-dashboard.html';
+}
+
+/* -------------------- INIT -------------------- */
+document.addEventListener('DOMContentLoaded', function () {
+    loadCourses();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>حذف و اضافه دروس</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #60a5fa;
+            --primary-dark: #1d4ed8;
+            --secondary: #8b5cf6;
+            --white: #ffffff;
+            --light: #f8fafc;
+            --gray-200: #e2e8f0;
+            --gray-800: #1e293b;
+            --border-radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .page-container {
+            width: 100%;
+            min-height: calc(100vh - 40px);
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(37, 99, 235, 0.15);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .academic-year {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            margin-top: 15px;
+        }
+
+        .content {
+            padding: 40px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .add-course-section {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--gray-200);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--gray-800);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .add-course-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .add-course-input {
+            flex: 1;
+            padding: 14px 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .add-course-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .add-course-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .add-course-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+        }
+
+        .add-course-btn:disabled {
+            background: #9fa8da;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .table-container {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
+            border: 2px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        .table-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--gray-800);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        thead {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+        }
+
+        th {
+            padding: 20px;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            color: white;
+            border: none;
+        }
+
+        th:first-child {
+            border-top-right-radius: 12px;
+        }
+
+        th:last-child {
+            border-top-left-radius: 12px;
+        }
+
+        td {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--gray-200);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        tbody tr {
+            transition: var(--transition);
+        }
+
+        tbody tr:hover {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(96, 165, 250, 0.05));
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
+        }
+
+        .course-code {
+            font-weight: 800;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .action-cell {
+            padding: 10px;
+        }
+
+        .delete-icon-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            box-shadow: 0 5px 15px rgba(239, 68, 68, 0.3);
+            margin: 0 auto;
+        }
+
+        .delete-icon-btn:hover {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        .delete-icon-btn i {
+            color: white;
+            font-size: 18px;
+        }
+
+        .loading-state,
+        .empty-state,
+        .error-state {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .loading-state i,
+        .empty-state i,
+        .error-state i {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            padding: 16px 32px;
+            border-radius: 12px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            opacity: 0;
+            transition: var(--transition);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(135deg, #4CAF50, #388E3C);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .notification.info {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .notification i {
+            font-size: 20px;
+        }
+
+        .back-btn {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 40px;
+            border-top: 2px solid var(--gray-200);
+            width: 100%;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+            margin: 0 auto;
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .page-container {
+                min-height: calc(100vh - 30px);
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .add-course-form {
+                flex-direction: column;
+            }
+            
+            .add-course-input,
+            .add-course-btn {
+                width: 100%;
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            th, td {
+                padding: 15px 10px;
+                font-size: 14px;
+            }
+            
+            .delete-icon-btn {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .delete-icon-btn i {
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .academic-year {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            .add-course-section,
+            .table-container {
+                padding: 20px;
+            }
+            
+            .section-title,
+            .table-title {
+                font-size: 18px;
+            }
+            
+            .back-button {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-container">
+    <div class="header">
+        <h1>حذف و اضافه دروس</h1>
+        <p>مدیریت دروس انتخاب شده</p>
+        <div class="academic-year">نیمسال ۱۴۰۴-۱</div>
+    </div>
+
+    <div class="content">
+        <div class="add-course-section">
+            <h3 class="section-title">
+                <i class="fas fa-plus-circle"></i>
+                افزودن درس جدید
+            </h3>
+            <div class="add-course-form">
+                <input 
+                    type="text" 
+                    class="add-course-input" 
+                    id="courseIdInput" 
+                    placeholder="کد درس مورد نظر را وارد کنید"
+                    inputmode="numeric"
+                >
+                <button class="add-course-btn" onclick="addCourse()" id="addCourseBtn">
+                    <i class="fas fa-plus"></i>
+                    افزودن درس
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <h3 class="table-title">
+                <i class="fas fa-list"></i>
+                دروس انتخاب شده
+            </h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ردیف</th>
+                        <th>کد درس</th>
+                        <th>نام درس</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody id="coursesBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="back-btn">
+            <button type="button" id="backBtn">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به داشبورد
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="api.js"></script>
+<script>
+    let allCourses = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadCourses();
+        setupEnterKey();
+    });
+
+    function showNotification(message, type = 'info', duration = 3000) {
+        const oldNotification = document.querySelector('.notification');
+        if (oldNotification) oldNotification.remove();
+
+        const notification = document.createElement('div');
+        notification.className = `notification ${type}`;
+        
+        const icon = type === 'success' ? 'fa-check-circle' : 
+                    type === 'error' ? 'fa-times-circle' : 'fa-info-circle';
+        
+        notification.innerHTML = `
+            <i class="fas ${icon}"></i>
+            <span>${message}</span>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => notification.classList.add('show'), 10);
+        
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        }, duration);
+    }
+
+    async function loadCourses() {
+        const tbody = document.getElementById('coursesBody');
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4" class="loading-state">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    در حال بارگذاری دروس...
+                </td>
+            </tr>
+        `;
+
+        try {
+            allCourses = await StudentAPI.getMyCourses();
+
+            if (!allCourses || allCourses.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="empty-state">
+                            <i class="fas fa-book"></i>
+                            درسی انتخاب نشده است
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            renderCourses(allCourses);
+
+        } catch (err) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="4" class="error-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        ${err.message || 'خطا در ارتباط با سرور'}
+                    </td>
+                </tr>
+            `;
+            showNotification('خطا در دریافت لیست دروس', 'error');
+        }
+    }
+
+    function renderCourses(courses) {
+        const tbody = document.getElementById('coursesBody');
+        tbody.innerHTML = '';
+
+        courses.forEach((course, index) => {
+            const tr = document.createElement('tr');
+            
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td class="course-code">${course.id || course.code || '-'}</td>
+                <td>${course.name || 'نامشخص'}</td>
+                <td class="action-cell">
+                    <button class="delete-icon-btn" onclick="removeCourse('${course.id}')" 
+                            title="حذف درس">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    async function addCourse() {
+        const input = document.getElementById('courseIdInput');
+        const button = document.getElementById('addCourseBtn');
+        const courseId = input.value.trim();
+
+        if (!courseId) {
+            showNotification('لطفاً کد درس را وارد کنید', 'error');
+            input.focus();
+            return;
+        }
+
+        if (!/^\d+$/.test(courseId)) {
+            showNotification('کد درس باید فقط عدد باشد', 'error');
+            input.focus();
+            return;
+        }
+
+        const originalText = button.innerHTML;
+        const originalDisabled = button.disabled;
+        
+        button.disabled = true;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> در حال افزودن...';
+
+        try {
+            await StudentAPI.addCourse(parseInt(courseId, 10));
+            showNotification('درس با موفقیت اضافه شد', 'success');
+            input.value = '';
+            loadCourses();
+
+        } catch (err) {
+            showNotification(err.message, 'error');
+        } finally {
+            button.disabled = originalDisabled;
+            button.innerHTML = originalText;
+        }
+    }
+
+    async function removeCourse(courseId) {
+        const course = allCourses.find(c => c.id === courseId);
+        if (!course) return;
+
+        if (!confirm(`آیا از حذف درس "${course.name}" مطمئن هستید؟`)) {
+            return;
+        }
+
+        const button = event.target.closest('.delete-icon-btn');
+        const originalHTML = button.innerHTML;
+        
+        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        button.disabled = true;
+
+        try {
+            await StudentAPI.removeCourse(courseId);
+            showNotification('درس با موفقیت حذف شد', 'success');
+            
+            const row = button.closest('tr');
+            row.style.opacity = '0';
+            row.style.transform = 'translateX(50px)';
+            
+            setTimeout(() => {
+                loadCourses(); 
+            }, 300);
+
+        } catch (err) {
+            showNotification(err.message, 'error');
+            button.innerHTML = originalHTML;
+            button.disabled = false;
+        }
+    }
+
+    function setupEnterKey() {
+        document.getElementById('courseIdInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addCourse();
+            }
+        });
+    }
+
+    document.getElementById('backBtn').addEventListener('click', function () {
+        window.location.href = 'student-dashboard.html';
+    });
+</script>
+
+</body>
+</html>

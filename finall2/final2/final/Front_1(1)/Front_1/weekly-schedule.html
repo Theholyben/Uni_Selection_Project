@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامه هفتگی </title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --primary-dark: #2563eb;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --white: #ffffff;
+            --light: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e1;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+            --border-radius: 16px;
+            --shadow: 0 10px 40px rgba(59, 130, 246, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path d="M0,0 L100,0 L100,100 Z" fill="white"/></svg>');
+        }
+
+        .header h1 {
+            font-size: 40px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+        }
+
+        .header p {
+            font-size: 18px;
+            opacity: 0.95;
+            max-width: 800px;
+            margin: 0 auto 25px;
+            position: relative;
+        }
+
+        .semester-info {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .schedule-container {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            overflow-x: auto;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .schedule-table thead th {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px 15px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 18px;
+            position: relative;
+            border-left: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .schedule-table thead th:first-child {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+            border-left: none;
+            width: 120px;
+        }
+
+        .schedule-table tbody td:first-child {
+            background: var(--light);
+            font-weight: 700;
+            color: var(--gray-800);
+            text-align: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-200);
+            border-right: 1px solid var(--gray-200);
+            font-size: 16px;
+        }
+
+        .schedule-table tbody td {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            padding: 10px;
+            vertical-align: top;
+            min-height: 100px;
+            position: relative;
+        }
+
+        .course-card {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 5px;
+            cursor: pointer;
+            transition: var(--transition);
+            animation: slideIn 0.5s ease;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .course-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+            border-color: white;
+        }
+
+        .course-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .course-code {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            backdrop-filter: blur(10px);
+        }
+
+        .course-units {
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        .course-title {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .course-details {
+            font-size: 13px;
+            opacity: 0.9;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .course-card.math {
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+        }
+
+        .course-card.cs {
+            background: linear-gradient(135deg, #10b981, #34d399);
+        }
+
+        .course-card.eng {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24);
+        }
+
+        .course-card.physics {
+            background: linear-gradient(135deg, #ef4444, #f87171);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 100px;
+            color: var(--gray-600);
+            font-size: 18px;
+        }
+
+        .loading-spinner {
+            border: 5px solid var(--gray-200);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray-600);
+            font-size: 14px;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .back-btn {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .back-btn button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px 36px;
+            border-radius: var(--border-radius);
+            font-weight: 700;
+            font-size: 17px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .back-btn button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.3);
+        }
+
+        @media (max-width: 1200px) {
+            .schedule-container {
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 32px;
+            }
+            
+            .schedule-table thead th {
+                padding: 20px 10px;
+                font-size: 16px;
+            }
+            
+            .course-card {
+                padding: 12px;
+            }
+            
+            .course-title {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 28px;
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .semester-info {
+                flex-direction: column;
+                padding: 12px 20px;
+                gap: 10px;
+            }
+        }
+        .course-card.time-8-10 {
+            background: linear-gradient(135deg, #f472b6, #f9a8d4); /* صورتی */
+        }
+        .course-card.time-10-12 {
+            background: linear-gradient(135deg, #8b5cf6, #c4b5fd); /* بنفش */
+        }
+        .course-card.time-12-14 {
+            background: linear-gradient(135deg, #ef4444, #f87171); /* قرمز */
+        }
+        .course-card.time-14-16 {
+            background: linear-gradient(135deg, #f59e0b, #fbbf24); /* زرد */
+        }
+        .course-card.time-16-18 {
+            background: linear-gradient(135deg, #3b82f6, #60a5fa); /* آبی */
+        }
+        .course-card.time-default {
+            background: linear-gradient(135deg, #6b7280, #9ca3af); /* پیش‌فرض */
+        }
+
+        .course-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>
+                <i class="fas fa-calendar-alt"></i>
+                برنامه هفتگی دانشجو
+            </h1>
+            <p>بررسی برنامه کلاسی و زمان‌بندی دروس ثبت‌نام شده</p>
+            <div class="semester-info">
+                <i class="fas fa-calendar-check"></i>
+                <span>نیمسال اول ۱۴۰۴</span>
+            </div>
+        </header>
+
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <p>در حال بارگذاری برنامه هفتگی...</p>
+        </div>
+
+        <div class="schedule-container" style="display: none;">
+            <table class="schedule-table">
+                <thead>
+                    <tr>
+                        <th>ساعت</th>
+                        <th>شنبه</th>
+                        <th>یکشنبه</th>
+                        <th>دوشنبه</th>
+                        <th>سه‌شنبه</th>
+                        <th>چهارشنبه</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="back-btn">
+            <button type="button" id="backBtn">
+                <i class="fas fa-arrow-right"></i>
+                بازگشت به داشبورد
+            </button>
+        </div>
+    </div>
+
+    <script src="api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePage();
+            
+            // تنظیم event listener برای دکمه بازگشت
+            const backBtn = document.getElementById('backBtn');
+            if (backBtn) {
+                backBtn.addEventListener('click', function () {
+                    window.location.href = 'student-dashboard.html';
+                });
+            }
+        });
+
+        function initializePage() {
+            showLoading();
+    
+            setTimeout(() => {
+                loadSchedule(); 
+            }, 1500);
+        }
+
+        async function loadSchedule() {
+            try {
+                const scheduleData = await StudentAPI.getSchedule();
+                renderSchedule(scheduleData);
+                hideLoading();
+        
+            } catch (error) {
+                console.error('خطا در دریافت برنامه هفتگی:', error);
+                showError(error.message || 'خطا در بارگذاری برنامه هفتگی');
+                hideLoading();
+            }
+        }
+
+        function renderSchedule(scheduleData) {
+            const scheduleContainer = document.querySelector('.schedule-container');
+            const scheduleBody = document.getElementById('scheduleBody');
+    
+            scheduleBody.innerHTML = '';
+    
+            if (!scheduleData || !scheduleData.scheduleGrid) {
+                showNoScheduleMessage();
+                scheduleContainer.style.display = 'block';
+                return;
+            }
+    
+            scheduleData.timeSlots.forEach((timeSlot, timeIndex) => {
+                const row = document.createElement('tr');
+        
+                const timeCell = document.createElement('td');
+                timeCell.textContent = timeSlot;
+                timeCell.style.fontWeight = '700';
+                row.appendChild(timeCell);
+        
+                for (let day = 0; day < 5; day++) {
+                    const cell = document.createElement('td');
+            
+                    const daySchedule = scheduleData.scheduleGrid[day];
+                    const cellData = daySchedule && daySchedule[timeIndex];
+            
+                    if (cellData && cellData.courses && cellData.courses.length > 0) {
+                        cellData.courses.forEach(course => {
+                            const courseCard = createCourseCard(course, timeSlot); 
+                            cell.appendChild(courseCard);
+                        });
+                    } else {
+                        cell.innerHTML = `
+                            <div style="text-align: center; padding: 30px 10px; color: var(--gray-300);">
+                                <i class="fas fa-coffee" style="font-size: 24px; margin-bottom: 10px;"></i>
+                                <div>زمان آزاد</div>
+                            </div>
+                        `;
+                    }
+            
+                    row.appendChild(cell);
+                }
+        
+                scheduleBody.appendChild(row);
+            });
+    
+            scheduleContainer.style.display = 'block';
+        }
+
+        function showNoScheduleMessage() {
+            const scheduleBody = document.getElementById('scheduleBody');
+            scheduleBody.innerHTML = `
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 60px 20px;">
+                        <i class="fas fa-calendar-times" style="font-size: 48px; color: var(--gray-300);"></i>
+                        <h3 style="margin: 20px 0;">برنامه‌ای برای نمایش وجود ندارد</h3>
+                        <p>درسی ثبت‌نام نکرده‌اید یا هنوز برنامه منتشر نشده است.</p>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function createCourseCard(course, timeSlot) {
+            const card = document.createElement('div');
+    
+            const colorClass = getColorByTime(timeSlot);
+            card.className = `course-card ${colorClass}`;
+    
+            card.innerHTML = `
+                <div class="course-header">
+                    <span class="course-code">${course.code}</span>
+                    <span class="course-units">${course.units} واحد</span>
+                </div>
+                <div class="course-title">${course.title}</div>
+                <div class="course-details">
+                    <div><i class="fas fa-user-tie"></i> ${course.professor}</div>
+                    <div><i class="fas fa-map-marker-alt"></i> ${course.location}</div>
+                </div>
+            `;
+    
+            card.addEventListener('click', () => {
+                showCourseCardDetails(course, timeSlot);
+            });
+    
+            return card;
+        }
+
+        function getColorByTime(timeSlot) {
+            if (!timeSlot) return 'time-default';
+    
+            const timeMatch = timeSlot.match(/(\d{1,2}):/);
+            if (!timeMatch) return 'time-default';
+    
+            const hour = parseInt(timeMatch[1]);
+    
+            if (hour >= 8 && hour < 10) return 'time-8-10';    
+            if (hour >= 10 && hour < 12) return 'time-10-12'; 
+            if (hour >= 12 && hour < 14) return 'time-12-14'; 
+            if (hour >= 14 && hour < 16) return 'time-14-16';  
+            if (hour >= 16 && hour < 18) return 'time-16-18';  
+    
+            return 'time-default';  
+        }
+
+        function showCourseCardDetails(course, timeSlot) {
+            const scheduleText = course.scheduleTimes ? 
+                course.scheduleTimes.join(' | ') : 
+                'زمان‌بندی نامشخص';
+    
+            alert(`
+                 ${course.code} - ${course.title}
+        
+                 استاد: ${course.professor}
+                 مکان: ${course.location}
+                 ساعت: ${timeSlot}
+                 واحد: ${course.units}
+                  زمان کلاس : (${timeSlot})
+        
+            `);
+        }
+
+        function getAuthToken() {
+            return localStorage.getItem('access_token') || localStorage.getItem('token') || 'demo-token';
+        }
+
+        function showLoading() {
+            const loadingEl = document.getElementById('loading');
+            if (loadingEl) loadingEl.style.display = 'block';
+    
+            const scheduleContainer = document.querySelector('.schedule-container');
+            if (scheduleContainer) scheduleContainer.style.display = 'none';
+        }
+
+        function hideLoading() {
+            const loadingEl = document.getElementById('loading');
+            if (loadingEl) loadingEl.style.display = 'none';
+        }
+
+        function showError(message = 'خطا در دریافت برنامه هفتگی') {
+            const scheduleContainer = document.querySelector('.schedule-container');
+            const scheduleBody = document.getElementById('scheduleBody');
+    
+            if (scheduleBody) {
+                scheduleBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 60px 20px;">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: #ef4444; margin-bottom: 20px;"></i>
+                            <h3 style="color: #ef4444; margin-bottom: 15px;">${message}</h3>
+                            <p>لطفاً اتصال اینترنت را بررسی کرده و مجدد تلاش کنید.</p>
+                            <button onclick="initializePage()" style="
+                                background: var(--primary);
+                                color: white;
+                                border: none;
+                                padding: 10px 20px;
+                                border-radius: 8px;
+                                margin-top: 20px;
+                                cursor: pointer;
+                            ">
+                                <i class="fas fa-redo"></i> تلاش مجدد
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }
+    
+            if (scheduleContainer) scheduleContainer.style.display = 'block';
+            hideLoading();
+        }
+    </script>
+</body>
+</html>

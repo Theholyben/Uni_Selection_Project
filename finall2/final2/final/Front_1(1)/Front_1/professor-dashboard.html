@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد استاد - سیستم انتخاب واحد</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-light: #60a5fa;
+            --primary-dark: #1d4ed8;
+            --secondary: #8b5cf6;
+            --white: #ffffff;
+            --light: #f8fafc;
+            --gray-200: #e2e8f0;
+            --gray-800: #1e293b;
+            --border-radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Vazirmatn', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .page-container {
+            width: 100%;
+            min-height: calc(100vh - 40px);
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 25px 60px rgba(37, 99, 235, 0.15);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .academic-year {
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 16px;
+            backdrop-filter: blur(10px);
+            margin-top: 15px;
+        }
+
+        .content {
+            padding: 40px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .courses-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            flex: 1;
+        }
+
+        .courses-table thead {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .courses-table th {
+            padding: 22px 20px;
+            font-size: 18px;
+            font-weight: 700;
+            text-align: center;
+            border: none;
+        }
+
+        .courses-table th:nth-child(1),
+        .courses-table td:nth-child(1) {
+            width: 60%;
+        }
+
+        .courses-table th:nth-child(2),
+        .courses-table td:nth-child(2) {
+            width: 20%;
+        }
+
+        .courses-table th:nth-child(3),
+        .courses-table td:nth-child(3) {
+            width: 20%;
+        }
+
+        .courses-table th:first-child {
+            border-top-right-radius: 12px;
+            padding-left: 680px; 
+        }
+
+        .courses-table th:nth-child(2) {  
+            position: relative;
+            padding-left: 400px;
+            white-space: nowrap;
+            font-size: 20px;
+        }
+
+        .courses-table th:last-child {
+            border-top-left-radius: 12px;
+            text-align: center;  
+    }
+
+        .courses-table tbody tr {
+            border-bottom: 2px solid var(--gray-200);
+            transition: var(--transition);
+        }
+
+        .courses-table tbody tr:hover {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(96, 165, 250, 0.05));
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.1);
+        }
+
+        .courses-table td {
+            padding: 25px 20px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .course-info {
+            direction: rtl;
+            text-align: right;
+        }
+
+        .course-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--gray-800);
+            margin-bottom: 15px;
+        }
+
+        .course-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #475569;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .detail-row i {
+            color: var(--primary);
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .students-column {
+            display: flex;
+            margin: 0 auto;      
+            align-items: center;
+            text-align: right;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .student-btn {
+            margin: auto;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), #a78bfa);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+            position: relative;
+            left: 200px;
+        }
+
+        .student-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.5);
+        }
+
+        .student-btn i {
+            color: white;
+            font-size: 28px;
+        }
+
+        .pdf-column {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .pdf-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5282f0, #286bf1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 30px rgba(68, 94, 239, 0.3);
+        }
+
+        .pdf-btn:hover {
+            transform: scale(1.15);
+            box-shadow: 0 15px 40px rgba(68, 94, 239, 0.5);
+        }
+
+        .pdf-btn i {
+            color: white;
+            font-size: 28px;
+        }
+
+        .back {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 30px;
+            border-radius: 12px;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(37, 99, 235, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .page-container {
+                min-height: calc(100vh - 30px);
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 28px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .courses-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .courses-table th,
+            .courses-table td {
+                min-width: 150px;
+                padding: 20px 15px;
+            }
+            
+            .course-title {
+                font-size: 20px;
+            }
+            
+            .detail-row {
+                font-size: 14px;
+            }
+            
+            .student-btn,
+            .pdf-btn {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .student-btn i,
+            .pdf-btn i {
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            
+            .page-container {
+                min-height: calc(100vh - 20px);
+                border-radius: 20px;
+            }
+            
+            .header {
+                padding: 25px 15px;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .academic-year {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+            
+            .content {
+                padding: 20px 15px;
+            }
+            
+            .courses-table th {
+                font-size: 16px;
+                padding: 15px 10px;
+            }
+            
+            .courses-table td {
+                padding: 20px 10px;
+            }
+            
+            .course-title {
+                font-size: 18px;
+            }
+            
+            .detail-row {
+                font-size: 13px;
+            }
+            
+            .student-btn,
+            .pdf-btn {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .student-btn i,
+            .pdf-btn i {
+                font-size: 20px;
+            }
+            
+            .back-button {
+                padding: 9px 20px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <div class="header">
+            <h1>داشبورد استاد</h1>
+            <p>مدیریت دروس و مشاهده دانشجویان</p>
+            <div class="academic-year" id="semester">
+                نیمسال اول ۱۴۰۴
+            </div>
+        </div>
+
+        <div class="content">
+            <table class="courses-table" id="coursesTable">
+                <thead>
+                    <tr>
+                        <th>دروس ارائه شده</th>
+                        <th>مدیریت دانشجویان</th>
+                        <th>دانلود اطلاعات</th>
+                    </tr>
+                </thead>
+                <tbody id="coursesBody">
+                </tbody>
+            </table>
+
+            <div class="back">
+                <button class="back-button" onclick="goToMainPage()">
+                    <i class="fas fa-arrow-right"></i>
+                    بازگشت به صفحه اصلی
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="api.js"></script>
+    <script>
+        const BASE_URL = 'http://localhost:8000/api/';
+
+        const coursesBody = document.getElementById('coursesBody');
+        const semesterEl = document.getElementById('semester');
+
+        function checkAuth() {
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            return true;
+        }
+
+        function showLoading() {
+            coursesBody.innerHTML = `
+                <tr>
+                    <td colspan="3" style="text-align:center;padding:40px;">
+                        در حال بارگذاری دروس...
+                    </td>
+                </tr>
+            `;
+        }
+
+        function showEmpty() {
+            coursesBody.innerHTML = `
+                <tr>
+                    <td colspan="3" style="text-align:center;padding:40px;">
+                        هیچ درسی برای نمایش وجود ندارد
+                    </td>
+                </tr>
+            `;
+        }
+
+        function showError() {
+            coursesBody.innerHTML = `
+                <tr>
+                    <td colspan="3" style="text-align:center;padding:40px;color:red;">
+                        خطا در دریافت اطلاعات
+                    </td>
+                </tr>
+            `;
+        }
+
+        async function loadProfessorCourses() {
+            if (!checkAuth()) return;
+
+            try {
+                showLoading();
+
+                const data = await ProfessorAPI.getCourses();
+
+                if (data.semester) {
+                    semesterEl.textContent = data.semester;
+                }
+
+                if (!Array.isArray(data.courses) || data.courses.length === 0) {
+                    showEmpty();
+                    return;
+                }
+
+                renderCourses(data.courses);
+
+            } catch (err) {
+                console.error('Network error:', err);
+
+                coursesBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align:center;padding:40px;color:red;">
+                            ${err.message || 'خطا در ارتباط با سرور. لطفاً اتصال اینترنت را بررسی کنید'}
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function renderCourses(courses) {
+            coursesBody.innerHTML = '';
+
+            courses.forEach(course => {
+                const row = document.createElement('tr');
+
+                const scheduleText = Array.isArray(course.schedule)
+                    ? course.schedule.map(s => `${s.day} ${s.startTime}-${s.endTime}`).join('، ')
+                    : 'تعیین نشده';
+
+                row.innerHTML = `
+                    <td>
+                        <div class="course-info">
+                            <div class="course-title">${course.name || 'بدون نام'}</div>
+                            <div class="course-details">
+                                <div class="detail-row">
+                                    <i class="fas fa-clock"></i>
+                                    ${scheduleText}
+                                </div>
+                                <div class="detail-row">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    ${course.location || 'نامشخص'}
+                                </div>
+                                <div class="detail-row">
+                                    <i class="fas fa-users"></i>
+                                    ظرفیت: ${course.capacity || '-'} | ثبت‌نام: ${course.enrolledCount || 0}
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="students-column" onclick="goToRemoveStudents('${course.id}')">
+                            <div class="student-btn">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="pdf-column">
+                            <div class="pdf-btn" onclick="downloadCoursePDF('${course.id}')">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                        </div>
+                    </td>
+                `;
+
+                coursesBody.appendChild(row);
+            });
+        }
+
+        function goToRemoveStudents(courseId) {
+            if (!checkAuth()) return;
+            window.location.href = `professor-remove-student.html?courseId=${courseId}`;
+        }
+
+        async function downloadCoursePDF(courseId) {
+            if (!checkAuth()) return;
+
+            try {
+                const response = await ProfessorAPI.downloadCoursePdf(courseId);
+
+                if (!response.ok) {
+                    alert('خطا در دانلود فایل');
+                    return;
+                }
+
+                const blob = await response.blob();
+                const url = URL.createObjectURL(blob);
+
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'course-info.pdf';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+
+                URL.revokeObjectURL(url);
+            } catch (err) {
+                alert('خطا در دانلود فایل');
+            }
+        }
+
+        function goToMainPage() {
+            window.location.href = 'login.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', loadProfessorCourses);
+    </script>
+</body>
+</html>

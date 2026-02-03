@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تعیین حد واحدهای اخذ شده</title>
+    <link href="https://v1.fontapi.ir/css/Vazirmatn" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-light: #a78bfa;
+            --danger: #ef4444;
+            --success: #10b981;
+            --gray-100: #f8fafc;
+            --gray-200: #e2e8f0;
+            --gray-800: #1e293b;
+        }
+
+        body {
+          background: 
+              linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%),
+              url('back.jpg');
+          font-family: Vazirmatn, sans-serif;
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 0;
+          padding: 20px;
+        }
+
+        .card {
+          background: white;
+          border-radius: 28px;
+          padding: 45px;
+          box-shadow: 
+              0 20px 60px rgba(139, 92, 246, 0.15),
+              0 4px 24px rgba(0, 0, 0, 0.06),
+              inset 0 1px 0 rgba(255, 255, 255, 0.8);
+          position: relative;
+          border: 1px solid rgba(139, 92, 246, 0.1);
+          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .card:hover {
+          box-shadow: 
+              0 30px 80px rgba(139, 92, 246, 0.25),
+              0 8px 32px rgba(0, 0, 0, 0.08);
+          transform: translateY(-4px);
+        }
+
+        h1 {
+          background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+      }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--gray-800);
+            font-size: 15px;
+        }
+
+        input {
+            width: 88%;
+            padding: 14px 20px;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+            text-align: center;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-light);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-800);
+            margin-top: 15px;
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+            text-align: center;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 10px;
+            color: var(--primary);
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 25px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="container">
+    <div class="card">
+      <h1>
+        <i class="fas fa-sliders-h"></i>
+        تعیین حد واحدهای اخذ شده
+      </h1>
+
+      <div class="loading" id="loading">
+        <i class="fas fa-spinner fa-spin"></i> در حال بارگذاری...
+      </div>
+
+      <div class="form-group">
+        <label for="minUnits">حداقل واحد</label>
+        <input 
+          type="number" 
+          id="minUnits" 
+          min="1" 
+          max="30"
+          placeholder="12">
+        <div class="error-message" id="minError"></div>
+      </div>
+
+      <div class="form-group">
+        <label for="maxUnits">حداکثر واحد</label>
+        <input 
+          type="number" 
+          id="maxUnits" 
+          min="1" 
+          max="30"
+          placeholder="20">
+        <div class="error-message" id="maxError"></div>
+      </div>
+
+      <button class="btn btn-primary" onclick="saveUnits()" id="saveBtn">
+        <i class="fas fa-save"></i>
+        ذخیره تغییرات 
+      </button>
+
+      <button class="btn btn-secondary" onclick="window.location.href='admin-dashboard.html'">
+        <i class="fas fa-arrow-right"></i>
+        بازگشت به داشبورد
+      </button>
+    </div>
+  </div>
+
+  <script src="api.js"></script>
+  <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('saveBtn').disabled = true;
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('saveBtn').disabled = false;
+        }
+
+        function showError(message, elementId) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+
+        function hideErrors() {
+            document.getElementById('minError').style.display = 'none';
+            document.getElementById('maxError').style.display = 'none';
+        }
+
+        function showSuccessMessage() {
+            alert('تنظیمات با موفقیت ذخیره شد');
+        }
+
+        async function loadUnitLimits() {
+            try {
+                showLoading();
+            
+                const data = await AdminAPI.getUnitLimits();
+                if (data.minUnits) {
+                    document.getElementById('minUnits').value = data.minUnits;
+                }
+                if (data.maxUnits) {
+                    document.getElementById('maxUnits').value = data.maxUnits;
+                }
+            } catch (error) {
+                console.error('خطا در دریافت تنظیمات:', error);
+                alert(error.message || 'خطا در دریافت تنظیمات');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        async function saveUnits() {
+            const minUnits = document.getElementById('minUnits').value;
+            const maxUnits = document.getElementById('maxUnits').value;
+        
+            if (!minUnits || !maxUnits) {
+                showError('لطفاً هر دو فیلد را پر کنید', 'minError');
+                return;
+            }
+        
+            if (parseInt(minUnits) >= parseInt(maxUnits)) {
+                showError('حداکثر واحد باید بزرگتر از حداقل باشد', 'maxError');
+                return;
+            }
+        
+            try {
+                showLoading();
+                hideErrors();
+
+                await AdminAPI.setUnitLimits(parseInt(minUnits), parseInt(maxUnits));
+                showSuccessMessage();
+            } catch (error) {
+                console.error('خطا در ذخیره تنظیمات:', error);
+                showError(error.message || 'مشکل در ارتباط با سرور', 'maxError');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function validateInputs() {
+            const min = document.getElementById('minUnits').value;
+            const max = document.getElementById('maxUnits').value;
+        
+            hideErrors();
+        
+            if (min && max && parseInt(min) >= parseInt(max)) {
+                showError('حداکثر واحد باید بزرگتر از حداقل باشد', 'maxError');
+                return false;
+            }
+        
+            return true;
+        }
+
+        document.getElementById('minUnits').addEventListener('input', validateInputs);
+        document.getElementById('maxUnits').addEventListener('input', validateInputs);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUnitLimits();
+        });
+    </script>
+
+</body>
+</html>
